@@ -1,0 +1,139 @@
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class SaleApplication {
+
+    private HashMap<Long, Product> products;
+    private HashMap<Long, Customer> customers;
+
+    public SaleApplication() {
+        products = new HashMap<>();
+        customers = new HashMap<>();
+    }
+
+    public void registerProduct(Product product) {
+        products.put(product.getId(), product);
+    }
+
+    public Product findProductById(Long id) {
+        return products.get(id);
+    }
+
+    public void registerCustomer(Customer customer) {
+        customers.put(customer.getId(), customer);
+    }
+
+    public Customer findCustomerById(Long id) {
+        return customers.get(id);
+    }
+
+    public void buyProduct(Long customerId, Long productId) {
+        Product product = findProductById(productId);
+        Customer customer = findCustomerById(customerId);
+
+        customer.addProductToCart(product);
+    }
+
+    public Product[] getProductsBoughtByCustomerId(Long customerId) {
+        Customer customer = findCustomerById(customerId);
+
+        return customer.getProductsBought().toArray(new Product[0]);
+    }
+
+    public static void main(String[] args) {
+        SaleApplication saleApplication = new SaleApplication();
+
+        // Register products
+        Product product1 = new Product(1L, "Product 1", 100);
+        Product product2 = new Product(2L, "Product 2", 200);
+        saleApplication.registerProduct(product1);
+        saleApplication.registerProduct(product2);
+
+        // Register customers
+        Customer customer1 = new Customer(1L, "Customer 1", "Last Name 1", 1000);
+        Customer customer2 = new Customer(2L, "Customer 2", "Last Name 2", 2000);
+        saleApplication.registerCustomer(customer1);
+        saleApplication.registerCustomer(customer2);
+
+        // Buy products
+        saleApplication.buyProduct(1L, 1L);
+        saleApplication.buyProduct(2L, 2L);
+
+        // Get products bought by customer ID
+        Product[] productsBoughtByCustomer1 = saleApplication.getProductsBoughtByCustomerId(1L);
+        Product[] productsBoughtByCustomer2 = saleApplication.getProductsBoughtByCustomerId(2L);
+
+        // Print products bought by customer ID
+        for (Product product : productsBoughtByCustomer1) {
+            System.out.println(product.getName());
+        }
+
+        for (Product product : productsBoughtByCustomer2) {
+            System.out.println(product.getName());
+        }
+    }
+}
+
+class Product {
+    private Long id;
+    private String name;
+    private double price;
+
+    public Product(Long id, String name, double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+class Customer {
+    private Long id;
+    private String firstName;
+    private String lastName;
+    private double balance;
+    private ArrayList<Product> productsBought;
+
+    public Customer(Long id, String firstName, String lastName, double balance) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.balance = balance;
+        productsBought = new ArrayList<>();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public ArrayList<Product> getProductsBought() {
+        return productsBought;
+    }
+
+    public void addProductToCart(Product product) {
+        productsBought.add(product);
+}
+}
