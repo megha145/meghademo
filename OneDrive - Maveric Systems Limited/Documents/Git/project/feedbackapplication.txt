@@ -1,0 +1,128 @@
+public class FeedbackApplication {
+
+    public static void main(String[] args) {
+
+        // Create a feedback store
+        FeedbackStore feedbackStore = new FeedbackStore();
+
+        // Create a customer store
+        CustomerStore customerStore = new CustomerStore();
+
+        // Register a customer in the customer store
+        Customer customer = new Customer(1, "Alice");
+        customerStore.addCustomer(customer);
+
+        // Add a feedback to the feedback store
+        Feedback feedback = new Feedback(1, "This is a great product!", customer);
+        feedbackStore.addFeedback(feedback);
+
+        // Fetch all feedbacks by customer id
+        int customerId = 1;
+        List<Feedback> feedbacks = feedbackStore.findFeedbacksByCustomerId(customerId);
+
+        // Print the feedbacks
+        for (Feedback feedback1 : feedbacks) {
+            System.out.println(feedback1);
+        }
+    }
+}
+}
+
+class Customer {
+    private int id;
+    private String name;
+
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+}
+
+class Feedback {
+    private int id;
+    private String description;
+    private Customer customer;
+
+    public Feedback(int id, String description, Customer customer) {
+        this.id = id;
+        this.description = description;
+        this.customer = customer;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", customer=" + customer +
+                '}';
+    }
+}
+
+class FeedbackStore {
+
+    private HashMap<Integer, Feedback> feedbacks;
+
+    public FeedbackStore() {
+        feedbacks = new HashMap<>();
+    }
+
+    public void addFeedback(Feedback feedback) {
+        feedbacks.put(feedback.getId(), feedback);
+    }
+
+    public List<Feedback> findFeedbacksByCustomerId(int customerId) {
+        List<Feedback> feedbacks = new ArrayList<>();
+        for (Feedback feedback : feedbacks.values()) {
+            if (feedback.getCustomer().getId() == customerId) {
+                feedbacks.add(feedback);
+            }
+        }
+        return feedbacks;
+    }
+}
+
+class CustomerStore {
+
+    private HashMap<Integer, Customer> customers;
+
+    public CustomerStore() {
+        customers = new HashMap<>();
+    }
+
+    public void addCustomer(Customer customer) {
+        customers.put(customer.getId(), customer);
+    }
+
+    public Customer findCustomerById(int id) {
+        return customers.get(id);
+    }
+
